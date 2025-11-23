@@ -44,7 +44,7 @@ export default function Success() {
                 <div>
                   <h3 className="text-2xl font-bold text-slate-900 mb-3">What Happens Next</h3>
                   <p className="text-slate-700 text-lg mb-4">
-                    Our team will review your information and reach out within 24-48 hours to discuss your project and see if we're a good fit to work together.
+                    Our team will review your information and reach out within 1-2 business days to discuss your project and see if we're a good fit to work together.
                   </p>
                 </div>
               </div>
@@ -54,13 +54,13 @@ export default function Success() {
                   icon={<Calendar className="w-5 h-5" />}
                   title="We'll Review Your Info"
                   description="Our team will carefully review your vision, property details, and preferences."
-                  timeframe="Today"
+                  timeframe="1 Business Day"
                 />
                 <NextStepItem
                   icon={<Phone className="w-5 h-5" />}
                   title="We'll Reach Out"
-                  description="We'll call or email within 24-48 hours to discuss your project and answer any questions."
-                  timeframe="24-48 hours"
+                  description="We'll call or email within 1-2 business days to discuss your project and answer any questions."
+                  timeframe="1-2 Business Days"
                 />
                 <NextStepItem
                   icon={<Heart className="w-5 h-5" />}
