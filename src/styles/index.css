@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Great+Vibes&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Champagne & Royal Blue Theme */
+    --background: 40 33% 95%;
+    --foreground: 210 60% 16%;
+    --card: 40 33% 97%;
+    --card-foreground: 210 60% 16%;
+    --popover: 40 33% 97%;
+    --popover-foreground: 210 60% 16%;
+    --primary: 210 60% 16%;
+    --primary-foreground: 40 33% 95%;
+    --secondary: 40 30% 85%;
+    --secondary-foreground: 210 60% 16%;
+    --muted: 40 20% 90%;
+    --muted-foreground: 210 20% 40%;
+    --accent: 38 45% 63%;
+    --accent-foreground: 210 60% 16%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 38 45% 63%;
+    --input: 38 45% 63%;
+    --ring: 210 60% 16%;
+    --radius: 0.25rem;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --sidebar-background: 40 33% 95%;
+    --sidebar-foreground: 210 60% 16%;
+    --sidebar-primary: 210 60% 16%;
+    --sidebar-primary-foreground: 40 33% 95%;
+    --sidebar-accent: 40 30% 85%;
+    --sidebar-accent-foreground: 210 60% 16%;
+    --sidebar-border: 38 45% 63%;
+    --sidebar-ring: 210 60% 16%;
+  }
+
+  .dark {
+    --background: 210 60% 10%;
+    --foreground: 40 33% 95%;
+    --card: 210 60% 12%;
+    --card-foreground: 40 33% 95%;
+    --popover: 210 60% 12%;
+    --popover-foreground: 40 33% 95%;
+    --primary: 38 45% 63%;
+    --primary-foreground: 210 60% 10%;
+    --secondary: 210 60% 16%;
+    --secondary-foreground: 40 33% 95%;
+    --muted: 210 60% 16%;
+    --muted-foreground: 210 20% 60%;
+    --accent: 38 45% 63%;
+    --accent-foreground: 210 60% 10%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 38 45% 63%;
+    --input: 210 60% 16%;
+    --ring: 38 45% 63%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-serif;
+  }
+}
