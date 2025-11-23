@@ -142,6 +142,18 @@ export default function StepFeaturesOutcomes({ data, updateData }) {
     <div className="flex flex-col lg:flex-row gap-8 h-full min-h-[600px]">
       {/* Left: Browse & Select */}
       <div className="flex-1 flex flex-col">
+        {/* Hero Image */}
+        <div className="relative h-48 rounded-2xl overflow-hidden mb-6">
+          <img
+            src="https://timelesspools.us/wp-content/uploads/2024/08/I-10.jpg"
+            alt="Luxury pool features"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 to-transparent flex items-end p-6">
+            <h3 className="text-3xl font-bold text-white">Features & Outcomes</h3>
+          </div>
+        </div>
+
         <div className="mb-6">
           <h2 className="text-3xl font-serif font-bold text-foreground mb-2">Explore Features</h2>
           <p className="text-muted-foreground">Select the elements that spark your interest.</p>

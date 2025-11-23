@@ -62,8 +62,19 @@ export default function StepInspiration({ data, updateData }) {
 
   return (
     <div className="space-y-8">
+      {/* Hero Image */}
+      <div className="relative h-48 rounded-2xl overflow-hidden mb-6">
+        <img
+          src="https://timelesspools.us/wp-content/uploads/2024/06/J-3.jpg"
+          alt="Pool inspiration"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 to-transparent flex items-end p-6">
+          <h3 className="text-3xl font-bold text-white">Inspiration Photos</h3>
+        </div>
+      </div>
+
       <div>
-        <h3 className="text-3xl font-bold text-gray-900 mb-3">Inspiration Photos</h3>
         <p className="text-gray-600 text-lg">
           Upload photos of pools, outdoor spaces, or design elements you love.
           Our AI will analyze them to understand your aesthetic preferences.

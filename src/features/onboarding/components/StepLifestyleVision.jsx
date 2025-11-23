@@ -41,8 +41,8 @@ export default function StepLifestyleVision({ data, updateData }) {
     <div className="space-y-8">
       {/* Hero Image */}
       <div className="relative h-48 rounded-2xl overflow-hidden mb-6">
-        <img 
-          src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200&q=80" 
+        <img
+          src="https://timelesspools.us/wp-content/uploads/2025/03/Geometric-Pool-with-Spa.jpg"
           alt="Luxury pool lifestyle"
           className="w-full h-full object-cover"
         />
@@ -82,11 +82,10 @@ export default function StepLifestyleVision({ data, updateData }) {
             <div
               key={use}
               onClick={() => toggleUse(use)}
-              className={`flex items-center space-x-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                (data.primary_use || []).includes(use)
+              className={`flex items-center space-x-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${(data.primary_use || []).includes(use)
                   ? "border-teal-700 bg-teal-50"
                   : "border-gray-200 hover:border-gray-300"
-              }`}
+                }`}
             >
               <Checkbox
                 checked={(data.primary_use || []).includes(use)}
@@ -133,11 +132,10 @@ export default function StepLifestyleVision({ data, updateData }) {
           <div className="grid md:grid-cols-2 gap-3">
             <div
               onClick={() => updateData({ has_children: !data.has_children })}
-              className={`flex items-center space-x-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                data.has_children
+              className={`flex items-center space-x-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${data.has_children
                   ? "border-teal-700 bg-teal-50"
                   : "border-gray-200 hover:border-gray-300"
-              }`}
+                }`}
             >
               <Checkbox
                 checked={data.has_children || false}
@@ -149,11 +147,10 @@ export default function StepLifestyleVision({ data, updateData }) {
 
             <div
               onClick={() => updateData({ has_pets: !data.has_pets })}
-              className={`flex items-center space-x-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                data.has_pets
+              className={`flex items-center space-x-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${data.has_pets
                   ? "border-teal-700 bg-teal-50"
                   : "border-gray-200 hover:border-gray-300"
-              }`}
+                }`}
             >
               <Checkbox
                 checked={data.has_pets || false}
@@ -188,8 +185,8 @@ export default function StepLifestyleVision({ data, updateData }) {
       </div>
 
       <div className="relative h-32 rounded-xl overflow-hidden">
-        <img 
-          src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=1200&q=80" 
+        <img
+          src="https://timelesspools.us/wp-content/uploads/2024/06/H-27.jpg"
           alt="Family enjoying pool"
           className="w-full h-full object-cover opacity-80"
         />

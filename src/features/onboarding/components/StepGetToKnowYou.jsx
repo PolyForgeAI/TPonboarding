@@ -32,8 +32,8 @@ export default function StepGetToKnowYou({ data, updateData }) {
     <div className="space-y-8">
       {/* Hero Image */}
       <div className="relative h-48 rounded-2xl overflow-hidden mb-6">
-        <img 
-          src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80" 
+        <img
+          src="https://timelesspools.us/wp-content/uploads/2025/03/Modern-Infinity-Edge-Pool.jpg"
           alt="Elegant poolside setting"
           className="w-full h-full object-cover"
         />
@@ -49,7 +49,7 @@ export default function StepGetToKnowYou({ data, updateData }) {
       {/* Contact Information */}
       <div className="space-y-6">
         <h4 className="text-xl font-semibold text-gray-900 border-b pb-2">Contact Information</h4>
-        
+
         <div className="space-y-2">
           <Label htmlFor="name" className="text-base font-medium flex items-center gap-2">
             <User className="w-4 h-4 text-teal-700" />
@@ -124,7 +124,7 @@ export default function StepGetToKnowYou({ data, updateData }) {
       {/* Property Information */}
       <div className="space-y-6">
         <h4 className="text-xl font-semibold text-gray-900 border-b pb-2">Property Location</h4>
-        
+
         <div className="space-y-2">
           <Label htmlFor="address" className="text-base font-medium flex items-center gap-2">
             <Home className="w-4 h-4 text-teal-700" />
@@ -184,12 +184,12 @@ export default function StepGetToKnowYou({ data, updateData }) {
           <Users className="w-5 h-5 text-teal-700" />
           Who will be involved in design decisions?
         </h4>
-        
+
         <RadioGroup
           value={data.decision_maker_count || "1"}
           onValueChange={(value) => {
             const count = parseInt(value);
-            updateData({ 
+            updateData({
               decision_maker_count: value,
               decision_makers: count === 1 ? [{ name: data.contact_name || "" }] : [{ name: "" }, { name: "" }]
             });
@@ -239,9 +239,9 @@ export default function StepGetToKnowYou({ data, updateData }) {
             </div>
           </div>
         )}
-        
+
         <p className="text-sm text-gray-500">
-          {data.decision_maker_count === "2" 
+          {data.decision_maker_count === "2"
             ? "We'll ask each person separately about their priorities and preferences."
             : "This helps us understand whose preferences to consider in the design."
           }

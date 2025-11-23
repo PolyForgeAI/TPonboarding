@@ -61,8 +61,19 @@ export default function StepMaterials({ data, updateData }) {
 
   return (
     <div className="h-full flex flex-col">
+      {/* Hero Image */}
+      <div className="relative h-48 rounded-2xl overflow-hidden mb-6">
+        <img
+          src="https://timelesspools.us/wp-content/uploads/2024/08/K-3.jpg"
+          alt="Pool materials and finishes"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 to-transparent flex items-end p-6">
+          <h3 className="text-3xl font-bold text-white">Material Selection</h3>
+        </div>
+      </div>
+
       <div className="mb-6">
-        <h2 className="text-3xl font-serif font-bold text-foreground mb-2">Material Selection</h2>
         <p className="text-muted-foreground">Curate the textures and colors for your oasis.</p>
       </div>
 

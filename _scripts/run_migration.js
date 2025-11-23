@@ -28,7 +28,7 @@ async function runMigration() {
         await client.connect();
         console.log('✅ Connected to database');
 
-        const sqlPath = path.join(__dirname, '..', '_sql', '001_referral_system.sql');
+        const sqlPath = path.join(__dirname, '..', '_sql', '002_fix_duplicate_email_constraint.sql');
         const sql = fs.readFileSync(sqlPath, 'utf8');
 
         console.log('Running migration: 001_referral_system.sql');
