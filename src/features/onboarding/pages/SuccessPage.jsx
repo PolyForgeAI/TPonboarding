@@ -102,7 +102,7 @@ export default function Success() {
         >
           <Button
             size="lg"
-            onClick={() => navigate(createPageUrl("Welcome"))}
+            onClick={() => navigate("/")}
             variant="outline"
             className="px-12 py-6 text-lg rounded-full border-2"
           >
