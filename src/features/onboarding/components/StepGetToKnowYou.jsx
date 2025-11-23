@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
-import { Textarea } from "@/shared/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/shared/components/ui/radio-group";
-import { User, Mail, Phone, Home, MapPin, Building, Users } from "lucide-react";
+import { User, Mail, Phone, Home, Building, Users } from "lucide-react";
+import { useLoadScript, Autocomplete } from "@react-google-maps/api";
 
 const PROJECT_TYPES = [
   { value: "new_construction", label: "New Pool", description: "Starting from scratch" },
@@ -11,22 +11,95 @@ const PROJECT_TYPES = [
   { value: "addition", label: "Addition", description: "Adding features to existing" }
 ];
 
+const libraries = ["places"];
+
 export default function StepGetToKnowYou({ data, updateData }) {
+  const [autocomplete, setAutocomplete] = useState(null);
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "",
+    libraries,
+  });
+
   useEffect(() => {
-    if (!data.contact_name) {
+    if (!data.contact_first_name) {
       updateData({
-        contact_name: "",
+        contact_first_name: "",
+        contact_last_name: "",
         contact_email: "",
         contact_phone: "",
-        project_type: "",
+        decision_maker_count: "1",
+        decision_makers: [],
         property_address: "",
         property_city: "",
         property_state: "",
         property_zip: "",
-        decision_makers: []
+        project_type: "",
       });
     }
   }, []);
+
+  const onPlaceChanged = () => {
+    if (autocomplete) {
+      const place = autocomplete.getPlace();
+
+      if (place.formatted_address) {
+        let street = "";
+        let city = "";
+        let state = "";
+        let zip = "";
+
+        place.address_components?.forEach((component) => {
+          const types = component.types;
+          if (types.includes("street_number")) {
+            street = component.long_name + " ";
+          }
+          if (types.includes("route")) {
+            street += component.long_name;
+          }
+          if (types.includes("locality")) {
+            city = component.long_name;
+          }
+          if (types.includes("administrative_area_level_1")) {
+            state = component.short_name;
+          }
+          if (types.includes("postal_code")) {
+            zip = component.long_name;
+          }
+        });
+
+        updateData({
+          property_address: street || place.formatted_address,
+          property_city: city,
+          property_state: state,
+          property_zip: zip,
+        });
+      }
+    }
+  };
+
+  const handleDecisionMakerChange = (value) => {
+    const count = parseInt(value);
+    updateData({
+      decision_maker_count: value,
+      decision_makers: count === 1
+        ? []
+        : [
+          {
+            first_name: data.contact_first_name || "",
+            last_name: data.contact_last_name || "",
+            email: data.contact_email || "",
+            phone: data.contact_phone || ""
+          },
+          { first_name: "", last_name: "", email: "", phone: "" }
+        ]
+    });
+  };
+
+  const updateDecisionMaker = (index, field, value) => {
+    const makers = [...(data.decision_makers || [])];
+    makers[index] = { ...makers[index], [field]: value };
+    updateData({ decision_makers: makers });
+  };
 
   return (
     <div className="space-y-8">
@@ -43,25 +116,40 @@ export default function StepGetToKnowYou({ data, updateData }) {
       </div>
 
       <p className="text-gray-600 text-lg">
-        Help us understand who you are and what type of project you're considering.
+        Just a few quick details to get started.
       </p>
 
-      {/* Contact Information */}
+      {/* Primary Contact */}
       <div className="space-y-6">
-        <h4 className="text-xl font-semibold text-gray-900 border-b pb-2">Contact Information</h4>
+        <h4 className="text-xl font-semibold text-gray-900 border-b pb-2">Your Information</h4>
 
-        <div className="space-y-2">
-          <Label htmlFor="name" className="text-base font-medium flex items-center gap-2">
-            <User className="w-4 h-4 text-teal-700" />
-            Full Name
-          </Label>
-          <Input
-            id="name"
-            placeholder="John Smith"
-            value={data.contact_name || ""}
-            onChange={(e) => updateData({ contact_name: e.target.value })}
-            className="h-12 text-base"
-          />
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <Label htmlFor="first-name" className="text-base font-medium flex items-center gap-2">
+              <User className="w-4 h-4 text-teal-700" />
+              First Name
+            </Label>
+            <Input
+              id="first-name"
+              placeholder="John"
+              value={data.contact_first_name || ""}
+              onChange={(e) => updateData({ contact_first_name: e.target.value })}
+              className="h-12 text-base"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="last-name" className="text-base font-medium">
+              Last Name
+            </Label>
+            <Input
+              id="last-name"
+              placeholder="Smith"
+              value={data.contact_last_name || ""}
+              onChange={(e) => updateData({ contact_last_name: e.target.value })}
+              className="h-12 text-base"
+            />
+          </div>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
@@ -97,6 +185,168 @@ export default function StepGetToKnowYou({ data, updateData }) {
         </div>
       </div>
 
+      {/* Decision Makers */}
+      <div className="space-y-4">
+        <h4 className="text-xl font-semibold text-gray-900 border-b pb-2 flex items-center gap-2">
+          <Users className="w-5 h-5 text-teal-700" />
+          Who Will Be Involved in Design Decisions?
+        </h4>
+
+        <RadioGroup
+          value={data.decision_maker_count || "1"}
+          onValueChange={handleDecisionMakerChange}
+          className="flex gap-4"
+        >
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="1" id="one-person" />
+            <Label htmlFor="one-person" className="cursor-pointer font-medium">Just me</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="2" id="two-people" />
+            <Label htmlFor="two-people" className="cursor-pointer font-medium">Two people (e.g., spouse/partner)</Label>
+          </div>
+        </RadioGroup>
+
+        {data.decision_maker_count === "2" && (
+          <div className="space-y-6 mt-6 p-6 bg-teal-50 rounded-xl border-2 border-teal-200">
+            <p className="text-sm text-teal-900 font-medium">
+              Please provide contact information for both decision makers:
+            </p>
+
+            {/* Person 1 */}
+            <div className="space-y-4">
+              <h5 className="font-semibold text-gray-900">Person 1</h5>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium">First Name</Label>
+                  <Input
+                    placeholder="First name"
+                    value={data.decision_makers?.[0]?.first_name || ""}
+                    onChange={(e) => updateDecisionMaker(0, "first_name", e.target.value)}
+                    className="h-10"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium">Last Name</Label>
+                  <Input
+                    placeholder="Last name"
+                    value={data.decision_makers?.[0]?.last_name || ""}
+                    onChange={(e) => updateDecisionMaker(0, "last_name", e.target.value)}
+                    className="h-10"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium">Email</Label>
+                  <Input
+                    type="email"
+                    placeholder="email@example.com"
+                    value={data.decision_makers?.[0]?.email || ""}
+                    onChange={(e) => updateDecisionMaker(0, "email", e.target.value)}
+                    className="h-10"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium">Phone</Label>
+                  <Input
+                    type="tel"
+                    placeholder="(555) 123-4567"
+                    value={data.decision_makers?.[0]?.phone || ""}
+                    onChange={(e) => updateDecisionMaker(0, "phone", e.target.value)}
+                    className="h-10"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Person 2 */}
+            <div className="space-y-4">
+              <h5 className="font-semibold text-gray-900">Person 2</h5>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium">First Name</Label>
+                  <Input
+                    placeholder="First name"
+                    value={data.decision_makers?.[1]?.first_name || ""}
+                    onChange={(e) => updateDecisionMaker(1, "first_name", e.target.value)}
+                    className="h-10"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium">Last Name</Label>
+                  <Input
+                    placeholder="Last name"
+                    value={data.decision_makers?.[1]?.last_name || ""}
+                    onChange={(e) => updateDecisionMaker(1, "last_name", e.target.value)}
+                    className="h-10"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium">Email</Label>
+                  <Input
+                    type="email"
+                    placeholder="email@example.com"
+                    value={data.decision_makers?.[1]?.email || ""}
+                    onChange={(e) => updateDecisionMaker(1, "email", e.target.value)}
+                    className="h-10"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium">Phone</Label>
+                  <Input
+                    type="tel"
+                    placeholder="(555) 123-4567"
+                    value={data.decision_makers?.[1]?.phone || ""}
+                    onChange={(e) => updateDecisionMaker(1, "phone", e.target.value)}
+                    className="h-10"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Property Address with Autocomplete */}
+      <div className="space-y-4">
+        <h4 className="text-xl font-semibold text-gray-900 border-b pb-2">Property Location</h4>
+
+        <div className="space-y-2">
+          <Label htmlFor="address" className="text-base font-medium flex items-center gap-2">
+            <Home className="w-4 h-4 text-teal-700" />
+            Property Address
+          </Label>
+          {isLoaded ? (
+            <Autocomplete
+              onLoad={setAutocomplete}
+              onPlaceChanged={onPlaceChanged}
+              options={{
+                types: ["address"],
+                componentRestrictions: { country: ["us", "ca"] },
+              }}
+            >
+              <Input
+                id="address"
+                placeholder="Start typing your address..."
+                value={data.property_address || ""}
+                onChange={(e) => updateData({ property_address: e.target.value })}
+                className="h-12 text-base"
+              />
+            </Autocomplete>
+          ) : (
+            <Input
+              id="address"
+              placeholder="Start typing your address..."
+              value={data.property_address || ""}
+              onChange={(e) => updateData({ property_address: e.target.value })}
+              className="h-12 text-base"
+            />
+          )}
+          <p className="text-sm text-gray-500">
+            Start typing and select your address from the dropdown
+          </p>
+        </div>
+      </div>
+
       {/* Project Type */}
       <div className="space-y-4">
         <h4 className="text-xl font-semibold text-gray-900 border-b pb-2">Project Type</h4>
@@ -119,133 +369,6 @@ export default function StepGetToKnowYou({ data, updateData }) {
             </div>
           ))}
         </RadioGroup>
-      </div>
-
-      {/* Property Information */}
-      <div className="space-y-6">
-        <h4 className="text-xl font-semibold text-gray-900 border-b pb-2">Property Location</h4>
-
-        <div className="space-y-2">
-          <Label htmlFor="address" className="text-base font-medium flex items-center gap-2">
-            <Home className="w-4 h-4 text-teal-700" />
-            Street Address
-          </Label>
-          <Input
-            id="address"
-            placeholder="123 Main Street"
-            value={data.property_address || ""}
-            onChange={(e) => updateData({ property_address: e.target.value })}
-            className="h-12 text-base"
-          />
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-4">
-          <div className="space-y-2 md:col-span-1">
-            <Label htmlFor="city" className="text-base font-medium flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-teal-700" />
-              City
-            </Label>
-            <Input
-              id="city"
-              placeholder="Newport Beach"
-              value={data.property_city || ""}
-              onChange={(e) => updateData({ property_city: e.target.value })}
-              className="h-12 text-base"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="state" className="text-base font-medium">State</Label>
-            <Input
-              id="state"
-              placeholder="CA"
-              value={data.property_state || ""}
-              onChange={(e) => updateData({ property_state: e.target.value })}
-              className="h-12 text-base"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="zip" className="text-base font-medium">ZIP</Label>
-            <Input
-              id="zip"
-              placeholder="92660"
-              value={data.property_zip || ""}
-              onChange={(e) => updateData({ property_zip: e.target.value })}
-              className="h-12 text-base"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Decision Makers */}
-      <div className="space-y-4">
-        <h4 className="text-xl font-semibold text-gray-900 border-b pb-2 flex items-center gap-2">
-          <Users className="w-5 h-5 text-teal-700" />
-          Who will be involved in design decisions?
-        </h4>
-
-        <RadioGroup
-          value={data.decision_maker_count || "1"}
-          onValueChange={(value) => {
-            const count = parseInt(value);
-            updateData({
-              decision_maker_count: value,
-              decision_makers: count === 1 ? [{ name: data.contact_name || "" }] : [{ name: "" }, { name: "" }]
-            });
-          }}
-          className="flex gap-4"
-        >
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="1" id="one-person" />
-            <Label htmlFor="one-person" className="cursor-pointer">Just me</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="2" id="two-people" />
-            <Label htmlFor="two-people" className="cursor-pointer">Two people (e.g., me and spouse/partner)</Label>
-          </div>
-        </RadioGroup>
-
-        {data.decision_maker_count === "2" && (
-          <div className="space-y-4 mt-4 p-4 bg-teal-50 rounded-xl border-2 border-teal-200">
-            <p className="text-sm text-teal-900 font-medium">Please provide names so we can capture preferences from both decision makers:</p>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label className="text-sm font-medium">Person 1 Name</Label>
-                <Input
-                  placeholder="Your name"
-                  value={data.decision_makers?.[0]?.name || ""}
-                  onChange={(e) => {
-                    const makers = [...(data.decision_makers || [{ name: "" }, { name: "" }])];
-                    makers[0] = { name: e.target.value };
-                    updateData({ decision_makers: makers });
-                  }}
-                  className="h-10"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label className="text-sm font-medium">Person 2 Name</Label>
-                <Input
-                  placeholder="Partner/spouse name"
-                  value={data.decision_makers?.[1]?.name || ""}
-                  onChange={(e) => {
-                    const makers = [...(data.decision_makers || [{ name: "" }, { name: "" }])];
-                    makers[1] = { name: e.target.value };
-                    updateData({ decision_makers: makers });
-                  }}
-                  className="h-10"
-                />
-              </div>
-            </div>
-          </div>
-        )}
-
-        <p className="text-sm text-gray-500">
-          {data.decision_maker_count === "2"
-            ? "We'll ask each person separately about their priorities and preferences."
-            : "This helps us understand whose preferences to consider in the design."
-          }
-        </p>
       </div>
     </div>
   );
