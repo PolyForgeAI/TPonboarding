@@ -63,7 +63,7 @@ export default function StepInspiration({ data, updateData }) {
   return (
     <div className="space-y-8">
       {/* Hero Image */}
-      <div className="relative h-48 rounded-2xl overflow-hidden mb-6">
+      <div className="relative h-48 rounded-2xl overflow-hidden mb-4">
         <img
           src="https://timelesspools.us/wp-content/uploads/2024/06/J-3.jpg"
           alt="Pool inspiration"

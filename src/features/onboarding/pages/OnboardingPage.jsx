@@ -311,7 +311,7 @@ export default function Onboarding() {
   return (
     <Layout>
       <div className="max-w-5xl mx-auto px-6 py-8 w-full">
-        <div className="mb-8">
+        <div className="mb-4">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl font-serif font-bold text-foreground">
               Step {currentStep} <span className="text-muted-foreground font-sans font-normal text-lg">/ {STEPS.length}</span>

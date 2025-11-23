@@ -143,7 +143,7 @@ export default function StepFeaturesOutcomes({ data, updateData }) {
       {/* Left: Browse & Select */}
       <div className="flex-1 flex flex-col">
         {/* Hero Image */}
-        <div className="relative h-48 rounded-2xl overflow-hidden mb-6">
+        <div className="relative h-48 rounded-2xl overflow-hidden mb-4">
           <img
             src="https://timelesspools.us/wp-content/uploads/2024/08/I-10.jpg"
             alt="Luxury pool features"

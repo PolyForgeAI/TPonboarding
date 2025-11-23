@@ -62,7 +62,7 @@ export default function StepMaterials({ data, updateData }) {
   return (
     <div className="h-full flex flex-col">
       {/* Hero Image */}
-      <div className="relative h-48 rounded-2xl overflow-hidden mb-6">
+      <div className="relative h-48 rounded-2xl overflow-hidden mb-4">
         <img
           src="https://timelesspools.us/wp-content/uploads/2024/08/K-3.jpg"
           alt="Pool materials and finishes"

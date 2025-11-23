@@ -104,7 +104,7 @@ export default function StepGetToKnowYou({ data, updateData }) {
   return (
     <div className="space-y-8">
       {/* Hero Image */}
-      <div className="relative h-48 rounded-2xl overflow-hidden mb-6">
+      <div className="relative h-48 rounded-2xl overflow-hidden mb-4">
         <img
           src="https://timelesspools.us/wp-content/uploads/2025/03/Modern-Infinity-Edge-Pool.jpg"
           alt="Elegant poolside setting"
@@ -119,9 +119,34 @@ export default function StepGetToKnowYou({ data, updateData }) {
         Just a few quick details to get started.
       </p>
 
-      {/* Primary Contact */}
+      {/* Decision Makers - FIRST */}
+      <div className="space-y-4">
+        <h4 className="text-xl font-semibold text-gray-900 border-b pb-2 flex items-center gap-2">
+          <Users className="w-5 h-5 text-teal-700" />
+          Who Will Be Involved in Design Decisions?
+        </h4>
+
+        <RadioGroup
+          value={data.decision_maker_count || "1"}
+          onValueChange={handleDecisionMakerChange}
+          className="flex gap-4"
+        >
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="1" id="one-person" />
+            <Label htmlFor="one-person" className="cursor-pointer font-medium">Just me</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="2" id="two-people" />
+            <Label htmlFor="two-people" className="cursor-pointer font-medium">Two people (e.g., spouse/partner)</Label>
+          </div>
+        </RadioGroup>
+      </div>
+
+      {/* Contact Info for Person 1 */}
       <div className="space-y-6">
-        <h4 className="text-xl font-semibold text-gray-900 border-b pb-2">Your Information</h4>
+        <h4 className="text-xl font-semibold text-gray-900 border-b pb-2">
+          {data.decision_maker_count === "2" ? "Person 1 Information" : "Your Information"}
+        </h4>
 
         <div className="grid md:grid-cols-2 gap-6">
           <div className="space-y-2">

@@ -51,7 +51,7 @@ export default function StepInvestment({ data, updateData }) {
   return (
     <div className="space-y-8">
       {/* Hero Image */}
-      <div className="relative h-48 rounded-2xl overflow-hidden mb-6">
+      <div className="relative h-48 rounded-2xl overflow-hidden mb-4">
         <img
           src="https://timelesspools.us/wp-content/uploads/2025/03/1920-AB-10.jpg"
           alt="Investment in quality craftsmanship"
