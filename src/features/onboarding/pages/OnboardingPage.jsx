@@ -393,7 +393,7 @@ export default function Onboarding() {
             size="lg"
             onClick={handleNext}
             disabled={isProcessing}
-            className="bg-primary text-primary-foreground hover:bg-primary/90 px-10 py-6 rounded-full shadow-lg shadow-primary/20 text-lg font-medium transition-all hover:scale-105 active:scale-95"
+            className="h-12 text-lg font-serif tracking-widest bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 px-12 rounded-full"
           >
             {isProcessing ? (
               <Loader2 className="w-5 h-5 mr-2 animate-spin" />
