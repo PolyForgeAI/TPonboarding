@@ -210,126 +210,53 @@ export default function StepGetToKnowYou({ data, updateData }) {
         </div>
       </div>
 
-      {/* Decision Makers */}
-      <div className="space-y-4">
-        <h4 className="text-xl font-semibold text-gray-900 border-b pb-2 flex items-center gap-2">
-          <Users className="w-5 h-5 text-teal-700" />
-          Who Will Be Involved in Design Decisions?
-        </h4>
+      {/* Person 2 Info (if Two People selected) */}
+      {data.decision_maker_count === "2" && (
+        <div className="space-y-6 p-6 bg-teal-50 rounded-xl border-2 border-teal-200">
+          <h4 className="text-xl font-semibold text-gray-900">Person 2 Information</h4>
 
-        <RadioGroup
-          value={data.decision_maker_count || "1"}
-          onValueChange={handleDecisionMakerChange}
-          className="flex gap-4"
-        >
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="1" id="one-person" />
-            <Label htmlFor="one-person" className="cursor-pointer font-medium">Just me</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="2" id="two-people" />
-            <Label htmlFor="two-people" className="cursor-pointer font-medium">Two people (e.g., spouse/partner)</Label>
-          </div>
-        </RadioGroup>
-
-        {data.decision_maker_count === "2" && (
-          <div className="space-y-6 mt-6 p-6 bg-teal-50 rounded-xl border-2 border-teal-200">
-            <p className="text-sm text-teal-900 font-medium">
-              Please provide contact information for both decision makers:
-            </p>
-
-            {/* Person 1 */}
-            <div className="space-y-4">
-              <h5 className="font-semibold text-gray-900">Person 1</h5>
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium">First Name</Label>
-                  <Input
-                    placeholder="First name"
-                    value={data.decision_makers?.[0]?.first_name || ""}
-                    onChange={(e) => updateDecisionMaker(0, "first_name", e.target.value)}
-                    className="h-10"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium">Last Name</Label>
-                  <Input
-                    placeholder="Last name"
-                    value={data.decision_makers?.[0]?.last_name || ""}
-                    onChange={(e) => updateDecisionMaker(0, "last_name", e.target.value)}
-                    className="h-10"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium">Email</Label>
-                  <Input
-                    type="email"
-                    placeholder="email@example.com"
-                    value={data.decision_makers?.[0]?.email || ""}
-                    onChange={(e) => updateDecisionMaker(0, "email", e.target.value)}
-                    className="h-10"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium">Phone</Label>
-                  <Input
-                    type="tel"
-                    placeholder="(555) 123-4567"
-                    value={data.decision_makers?.[0]?.phone || ""}
-                    onChange={(e) => updateDecisionMaker(0, "phone", e.target.value)}
-                    className="h-10"
-                  />
-                </div>
-              </div>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <Label className="text-base font-medium">First Name</Label>
+              <Input
+                placeholder="First name"
+                value={data.decision_makers?.[1]?.first_name || ""}
+                onChange={(e) => updateDecisionMaker(1, "first_name", e.target.value)}
+                className="h-12"
+              />
             </div>
-
-            {/* Person 2 */}
-            <div className="space-y-4">
-              <h5 className="font-semibold text-gray-900">Person 2</h5>
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium">First Name</Label>
-                  <Input
-                    placeholder="First name"
-                    value={data.decision_makers?.[1]?.first_name || ""}
-                    onChange={(e) => updateDecisionMaker(1, "first_name", e.target.value)}
-                    className="h-10"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium">Last Name</Label>
-                  <Input
-                    placeholder="Last name"
-                    value={data.decision_makers?.[1]?.last_name || ""}
-                    onChange={(e) => updateDecisionMaker(1, "last_name", e.target.value)}
-                    className="h-10"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium">Email</Label>
-                  <Input
-                    type="email"
-                    placeholder="email@example.com"
-                    value={data.decision_makers?.[1]?.email || ""}
-                    onChange={(e) => updateDecisionMaker(1, "email", e.target.value)}
-                    className="h-10"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium">Phone</Label>
-                  <Input
-                    type="tel"
-                    placeholder="(555) 123-4567"
-                    value={data.decision_makers?.[1]?.phone || ""}
-                    onChange={(e) => updateDecisionMaker(1, "phone", e.target.value)}
-                    className="h-10"
-                  />
-                </div>
-              </div>
+            <div className="space-y-2">
+              <Label className="text-base font-medium">Last Name</Label>
+              <Input
+                placeholder="Last name"
+                value={data.decision_makers?.[1]?.last_name || ""}
+                onChange={(e) => updateDecisionMaker(1, "last_name", e.target.value)}
+                className="h-12"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-base font-medium">Email</Label>
+              <Input
+                type="email"
+                placeholder="email@example.com"
+                value={data.decision_makers?.[1]?.email || ""}
+                onChange={(e) => updateDecisionMaker(1, "email", e.target.value)}
+                className="h-12"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-base font-medium">Phone</Label>
+              <Input
+                type="tel"
+                placeholder="(555) 123-4567"
+                value={data.decision_makers?.[1]?.phone || ""}
+                onChange={(e) => updateDecisionMaker(1, "phone", e.target.value)}
+                className="h-12"
+              />
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Property Address with Autocomplete */}
       <div className="space-y-4">
