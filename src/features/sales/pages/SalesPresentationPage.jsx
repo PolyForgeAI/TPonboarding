@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { base44 } from "@/api/base44Client";
+import { supabase } from "@/shared/lib/supabaseClient";
 import { useQuery } from "@tanstack/react-query";
-import SalesPresentationMode from "../components/sales/SalesPresentationMode";
+import SalesPresentationMode from "../components/SalesPresentationMode";
 import { Loader2 } from "lucide-react";
 
 export default function SalesPresentation() {
@@ -14,12 +14,14 @@ export default function SalesPresentation() {
     queryKey: ['submission-by-token', token],
     queryFn: async () => {
       if (!token) return null;
-      const results = await base44.entities.OnboardingSubmission.filter(
-        { access_token: token },
-        "-created_date",
-        1
-      );
-      return results;
+      const { data, error } = await supabase
+        .from('OnboardingSubmission')
+        .select('*')
+        .eq('id', token) // Assuming token is ID for now, or we need an access_token column
+        .limit(1);
+
+      if (error) throw error;
+      return data;
     },
     enabled: !!token,
   });
@@ -39,7 +41,7 @@ export default function SalesPresentation() {
   }
 
   return (
-    <SalesPresentationMode 
+    <SalesPresentationMode
       submission={submission}
       concepts={submission.design_concepts}
     />

@@ -8,7 +8,7 @@ const supabaseUrl = process.env.VITE_SUPABASE_URL;
 const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY;
 
 console.log('DATABASE_URL present:', !!dbUrl);
-console.log('VITE_SUPABASE_URL present:', !!supabaseUrl);
+console.log('VITE_SUPABASE_URL:', supabaseUrl);
 console.log('VITE_SUPABASE_ANON_KEY present:', !!supabaseKey);
 
 async function testSupabaseSDK() {

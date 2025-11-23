@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
+import { supabase } from "@/shared/lib/supabaseClient";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Card, CardContent } from "@/shared/components/ui/card";
@@ -80,20 +81,43 @@ export default function Welcome() {
     setIsLoading(true);
 
     try {
-      const submissions = await base44.entities.OnboardingSubmission.filter({
-        access_code: trimmed
-      });
+      // First, check if this is a referral code
+      const { data: accessCodeData, error: codeError } = await supabase
+        .from("AccessCode")
+        .select("*, referrer:OnboardingSubmission!AccessCode_referrer_id_fkey(contact_name)")
+        .eq("referral_code", trimmed)
+        .single();
 
-      if (submissions && submissions.length > 0) {
-        navigate(createPageUrl("Onboarding") + `?code=${trimmed}`);
+      if (accessCodeData && !codeError) {
+        // This is a referral code! Show VIP animation
+        const referrerName = accessCodeData.referrer?.contact_name || "a friend";
+
+        toast.success(
+          `🎉 VIP Access Granted! Welcome, friend of ${referrerName}!`,
+          { duration: 4000 }
+        );
+
+        // Navigate to onboarding with the referral code
+        setTimeout(() => {
+          navigate(createPageUrl("Onboarding") + `?code=${trimmed}&referral=true`);
+        }, 1500);
       } else {
-        toast.error("Access code not found. Please check and try again.");
+        // Not a referral code, check if it's a regular access code
+        const submissions = await base44.entities.OnboardingSubmission.filter({
+          access_code: trimmed
+        });
+
+        if (submissions && submissions.length > 0) {
+          navigate(createPageUrl("Onboarding") + `?code=${trimmed}`);
+        } else {
+          toast.error("Access code not found. Please check and try again.");
+        }
       }
     } catch (error) {
       console.error("Error finding access code:", error);
       toast.error("Error validating access code. Please try again.");
     }
-    
+
     setIsLoading(false);
   };
 
@@ -122,7 +146,7 @@ export default function Welcome() {
       };
 
       const accessCode = generateCode();
-      
+
       await base44.entities.OnboardingSubmission.create({
         contact_name: requestData.name,
         contact_email: requestData.email,
@@ -155,7 +179,7 @@ P.S. Save this email - you'll need your access code to return anytime.`
       });
 
       toast.success(`Access code sent to ${requestData.email}!`);
-      
+
       setTimeout(() => {
         navigate(createPageUrl("Onboarding") + `?code=${accessCode}`);
       }, 1500);
@@ -171,7 +195,7 @@ P.S. Save this email - you'll need your access code to return anytime.`
   return (
     <div className="min-h-screen bg-slate-50 relative overflow-hidden">
       {/* Hero Background - Stunning Pool from Gallery */}
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
           backgroundImage: `url('https://timelesspools.us/wp-content/uploads/2024/05/U-1.jpg')`,
@@ -184,7 +208,7 @@ P.S. Save this email - you'll need your access code to return anytime.`
         {/* Header - Minimal */}
         <header className="py-6 px-6">
           <div className="max-w-7xl mx-auto flex items-center justify-between">
-            <motion.div 
+            <motion.div
               className="flex items-center gap-3"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -210,7 +234,7 @@ P.S. Save this email - you'll need your access code to return anytime.`
         {/* Hero Section */}
         <section className="py-20 px-6">
           <div className="max-w-7xl mx-auto">
-            
+
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -245,8 +269,8 @@ P.S. Save this email - you'll need your access code to return anytime.`
                     transition={{ duration: 0.6 }}
                     className="absolute inset-0"
                   >
-                    <img 
-                      src={COMPARISONS[currentComparison].image} 
+                    <img
+                      src={COMPARISONS[currentComparison].image}
                       alt="Luxury Pool"
                       className="w-full h-full object-cover"
                     />
@@ -307,11 +331,10 @@ P.S. Save this email - you'll need your access code to return anytime.`
                     <button
                       key={idx}
                       onClick={() => setCurrentComparison(idx)}
-                      className={`h-1 transition-all ${
-                        idx === currentComparison 
-                          ? 'bg-cyan-400 w-12' 
-                          : 'bg-white/50 w-8 hover:bg-white/70'
-                      }`}
+                      className={`h-1 transition-all ${idx === currentComparison
+                        ? 'bg-cyan-400 w-12'
+                        : 'bg-white/50 w-8 hover:bg-white/70'
+                        }`}
                     />
                   ))}
                 </div>
@@ -408,13 +431,13 @@ P.S. Save this email - you'll need your access code to return anytime.`
                   ) : (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
                       <h3 className="text-2xl font-black text-slate-900 mb-6">Let's Connect</h3>
-                      
+
                       <div>
                         <Label className="text-slate-700 text-sm mb-2 block font-semibold">Name *</Label>
                         <Input
                           placeholder="John Smith"
                           value={requestData.name}
-                          onChange={(e) => setRequestData({...requestData, name: e.target.value})}
+                          onChange={(e) => setRequestData({ ...requestData, name: e.target.value })}
                           className="bg-white border-2 border-slate-300 text-slate-900 placeholder:text-slate-400 h-12 focus:border-cyan-500"
                         />
                       </div>
@@ -425,7 +448,7 @@ P.S. Save this email - you'll need your access code to return anytime.`
                           type="email"
                           placeholder="john@email.com"
                           value={requestData.email}
-                          onChange={(e) => setRequestData({...requestData, email: e.target.value})}
+                          onChange={(e) => setRequestData({ ...requestData, email: e.target.value })}
                           className="bg-white border-2 border-slate-300 text-slate-900 placeholder:text-slate-400 h-12 focus:border-cyan-500"
                         />
                       </div>
@@ -436,7 +459,7 @@ P.S. Save this email - you'll need your access code to return anytime.`
                           type="tel"
                           placeholder="(555) 123-4567"
                           value={requestData.phone}
-                          onChange={(e) => setRequestData({...requestData, phone: e.target.value})}
+                          onChange={(e) => setRequestData({ ...requestData, phone: e.target.value })}
                           className="bg-white border-2 border-slate-300 text-slate-900 placeholder:text-slate-400 h-12 focus:border-cyan-500"
                         />
                       </div>
@@ -446,7 +469,7 @@ P.S. Save this email - you'll need your access code to return anytime.`
                         <Input
                           placeholder="123 Main St, Newport Beach, CA"
                           value={requestData.property_address}
-                          onChange={(e) => setRequestData({...requestData, property_address: e.target.value})}
+                          onChange={(e) => setRequestData({ ...requestData, property_address: e.target.value })}
                           className="bg-white border-2 border-slate-300 text-slate-900 placeholder:text-slate-400 h-12 focus:border-cyan-500"
                         />
                       </div>

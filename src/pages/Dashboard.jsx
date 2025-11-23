@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { supabase } from "@/shared/lib/supabaseClient";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { Badge } from "@/shared/components/ui/badge";
@@ -20,14 +20,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
-import { 
-  Users, 
-  CheckCircle, 
-  Clock, 
-  Search, 
-  Eye, 
-  Mail, 
-  Phone, 
+import {
+  Users,
+  CheckCircle,
+  Clock,
+  Search,
+  Eye,
+  Mail,
+  Phone,
   MapPin,
   Home,
   Briefcase,
@@ -42,7 +42,15 @@ export default function Dashboard() {
 
   const { data: submissions, isLoading } = useQuery({
     queryKey: ["submissions"],
-    queryFn: () => base44.entities.OnboardingSubmission.list("-created_date"),
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('OnboardingSubmission')
+        .select('*')
+        .order('created_date', { ascending: false });
+
+      if (error) throw error;
+      return data;
+    },
     initialData: [],
   });
 
@@ -96,7 +104,7 @@ export default function Dashboard() {
               View enriched customer data with automatic property and customer research
             </p>
           </div>
-          <Button 
+          <Button
             onClick={exportToCSV}
             variant="outline"
             className="gap-2"

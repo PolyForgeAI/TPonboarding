@@ -21,17 +21,17 @@ import MaterialSelector from "@/features/materials/pages/MaterialSelectorPage";
 
 import APIStatus from "@/features/admin/pages/APIStatusPage";
 
-import SalesPresentation from "./SalesPresentation";
+import SalesPresentation from "@/features/sales/pages/SalesPresentationPage";
 
-import StrategicResearch from "./StrategicResearch";
+import StrategicResearch from "@/features/intelligence/pages/StrategicResearchPage";
 
 import CustomerPortalPage from "./CustomerPortalPage";
 
-import SalesHub from "./SalesHub";
+import SalesHub from "@/features/sales/pages/SalesHubPage";
 
-import IntelligenceCenter from "./IntelligenceCenter";
+import IntelligenceCenter from "@/features/intelligence/pages/IntelligenceCenterPage";
 
-import StrategyDashboard from "./StrategyDashboard";
+import StrategyDashboard from "@/features/intelligence/pages/StrategyDashboardPage";
 
 import PainPointsResearch from "./PainPointsResearch";
 
@@ -54,6 +54,8 @@ import DatabaseSchema from "./DatabaseSchema";
 import UserManagement from "@/features/admin/pages/UserManagementPage";
 
 import Documentation from "@/features/admin/pages/DocumentationPage";
+
+import ReferralCodes from "@/features/admin/pages/ReferralCodesPage";
 
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 
@@ -115,6 +117,8 @@ const PAGES = {
     UserManagement: UserManagement,
 
     Documentation: Documentation,
+
+    ReferralCodes: ReferralCodes,
 
 }
 
@@ -198,7 +202,9 @@ function PagesContent() {
 
                 <Route path="/Documentation" element={<Documentation />} />
 
-                <Route path="/dossier/:id" element={<DossierDetail />} />
+                <Route path="/ReferralCodes" element={<ReferralCodes />} />
+
+                <Route path="/DossierDetail/:id" element={<DossierDetail />} />
 
             </Routes>
         </Layout>

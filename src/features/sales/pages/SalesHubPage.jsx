@@ -7,14 +7,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/ui
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { Loader2, AlertTriangle } from "lucide-react";
 import { Badge } from "@/shared/components/ui/badge";
-import LeadScoringSystem from "../components/sales/LeadScoringSystem";
-import FollowUpAutomation from "../components/sales/FollowUpAutomation";
-import ObjectionHandler from "../components/sales/ObjectionHandler";
-import PriceOptimizer from "../components/intelligence/PriceOptimizer";
-import SocialProofEngine from "../components/sales/SocialProofEngine";
-import CompetitorAnalysis from "../components/intelligence/CompetitorAnalysis";
-import CustomerIntentAnalyzer from "../components/intelligence/CustomerIntentAnalyzer";
-import WealthIndicators from "../components/intelligence/WealthIndicators";
+import LeadScoringSystem from "../components/LeadScoringSystem";
+import FollowUpAutomation from "../components/FollowUpAutomation";
+import ObjectionHandler from "../components/ObjectionHandler";
+import PriceOptimizer from "@/features/intelligence/components/PriceOptimizer";
+import SocialProofEngine from "../components/SocialProofEngine";
+import CompetitorAnalysis from "@/features/intelligence/components/CompetitorAnalysis";
+import CustomerIntentAnalyzer from "@/features/intelligence/components/CustomerIntentAnalyzer";
+import WealthIndicators from "@/features/intelligence/components/WealthIndicators";
 import ContentLibrary from "@/features/admin/components/ContentLibrary";
 
 export default function SalesHub() {

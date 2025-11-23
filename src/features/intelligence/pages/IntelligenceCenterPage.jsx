@@ -3,9 +3,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/components/ui
 import { Card } from "@/shared/components/ui/card";
 import { Sparkles, MapPin, Cloud, TrendingUp } from "lucide-react";
 import { motion } from "framer-motion";
-import DesignTrendPredictor from "../components/intelligence/DesignTrendPredictor";
-import NeighborhoodMapper from "../components/intelligence/NeighborhoodMapper";
-import WeatherIntegration from "../components/intelligence/WeatherIntegration";
+import DesignTrendPredictor from "../components/DesignTrendPredictor";
+import NeighborhoodMapper from "../components/NeighborhoodMapper";
+import WeatherIntegration from "../components/WeatherIntegration";
 
 export default function IntelligenceCenter() {
   return (

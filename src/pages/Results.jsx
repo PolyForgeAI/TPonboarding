@@ -32,9 +32,9 @@ import {
 import { motion } from "framer-motion";
 import PDFExportButton from "@/features/dossier/components/PDFExportButton";
 import Pool3DViewer from "../components/visualization/Pool3DViewer"; // New component
-import PropertyImageGallery from "../components/sales/PropertyImageGallery"; // New component
-import ROICalculator from "../components/sales/ROICalculator"; // New component
-import ConceptComparison from "../components/sales/ConceptComparison"; // New component
+import PropertyImageGallery from "@/features/sales/components/PropertyImageGallery"; // New component
+import ROICalculator from "@/features/sales/components/ROICalculator"; // New component
+import ConceptComparison from "@/features/sales/components/ConceptComparison"; // New component
 import MaterialZoomViewer from "@/features/materials/components/MaterialZoomViewer"; // New component
 import TimelineVisualization from "../components/construction/TimelineVisualization"; // New component
 import VirtualWalkthrough from "../components/customer/VirtualWalkthrough"; // New component
